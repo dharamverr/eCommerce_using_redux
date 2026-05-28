@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-xs: 350px;
+  --breakpoint-tablet: 900px;
+  --breakpoint-desktop: 1200px;
+}
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
+/* .product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap: 1rem;
+    padding-block: 10px;
+    padding-inline: 100px;
+} */
+/* .product {
+    max-width: 250px;
+    border: 1px solid rgb(148, 148, 148);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+} */
+
+/* .product-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.product-image> img {
+    width: 50%;
+    height: 150px;
+}
+.title-container a {
+    text-decoration: none;
+    color: black;
+    font-size: medium;
+} */
+/* .price-rating-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.price {
+    font-size: large;
+} */
+
+/* .cta-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: medium;
+} */
+
+/* button {
+    padding-block:5px;
+    padding-inline: 10px;
+    cursor: pointer;
+} */
