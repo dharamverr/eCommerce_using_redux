@@ -14,7 +14,7 @@ export default function Products({ productId, title, rating, price, image }) {
 
   const handleWishlist = () => {
     if (isWishList) {
-      dispatch(wishListRemoveItem(productId));
+      dispatch(wishListRemoveItem({productId}));
     } else {
       dispatch(wishListAddItem({ productId, title, rating, price, image }));
     }

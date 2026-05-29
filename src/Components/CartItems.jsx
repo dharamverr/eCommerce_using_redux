@@ -16,10 +16,10 @@ export default function CartItems({productId,title,rating,image,price,quantity})
         </div>
         <div className="justify-self-center">$ {price}</div>
         <div className="justify-self-center flex gap-1">
-            <button className='py-1 px-2 bg-gray-200 rounded cursor-pointer' onClick={() => dispatch(cartDecreaseQuantity(productId))}>-</button>
+            <button className='py-1 px-2 bg-gray-200 rounded cursor-pointer' onClick={() => dispatch(cartDecreaseQuantity({productId}))}>-</button>
             <span>{quantity}</span>
-            <button className='py-1 px-2 bg-gray-200 rounded cursor-pointer' onClick={() => dispatch(cartIncreaseQuantity(productId))}>+</button>
-            <img src={deleteIcon} alt="delete-icon" className='w-8 h-8 cursor-pointer' onClick={() => dispatch(cartRemoveItem(productId))}/>
+            <button className='py-1 px-2 bg-gray-200 rounded cursor-pointer' onClick={() => dispatch(cartIncreaseQuantity({productId}))}>+</button>
+            <img src={deleteIcon} alt="delete-icon" className='w-8 h-8 cursor-pointer' onClick={() => dispatch(cartRemoveItem({productId}))}/>
         </div>
         <div className="justify-self-end">$ {(price * quantity).toFixed(2)}</div>
     </div>
