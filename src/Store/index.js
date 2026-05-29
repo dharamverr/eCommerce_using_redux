@@ -12,6 +12,7 @@ import {
   wishListReducer,
   wishListRemoveItem,
 } from "./wishListSlice";
+import { logger } from "./middleware/logger";
 
 export const store = configureStore({
   reducer: {
@@ -19,4 +20,8 @@ export const store = configureStore({
     cartItems: cartReducer,
     wishListItems: wishListReducer,
   },
+  middleware: (getDefaultMiddleware) => [
+  ...getDefaultMiddleware(),
+  logger,
+]
 });

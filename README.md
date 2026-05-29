@@ -1,16 +1,43 @@
-# React + Vite
+# Middleware in redux toolkit
+middleware is code that sits between an action being dispatched and the moment it reaches the reducer. It provides a powerful extension point to intercept, modify, or cancel actions, as well as to perform side effects like API calls and logging.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Default MiddlewareWhen 
+you use configureStore from Redux Toolkit, it automatically adds several useful middlewares by default:
 
-Currently, two official plugins are available:
+- Redux Thunk: The standard tool for writing async logic (like fetching data) outside of components.
+- Immutability Check: (Development only) Deeply compares state to detect accidental mutations, throwing an error if found.
+- Serializability Check: (Development only) Warns if non-serializable values (like Promises or Functions) are put into the state or actions.
+- Action Creator Check: (Development only) Detects if an action creator was accidentally dispatched without being called.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+# Adding Custom Middleware
+- To add your own middleware while keeping the defaults, use the middleware callback in configureStore and call getDefaultMiddleware().
 
-## React Compiler
+<pre> ```javascriptimport { configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import rootReducer from './reducer'
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+const store = configureStore({
+  reducer: rootReducer,
+  // Use .concat() or .prepend() to keep default middleware
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+})``` </pre>
 
-## Expanding the ESLint configuration
+# Key Specialized Middlewares in RTK
+**Beyond the defaults, RTK provides specialized tools for specific patterns:** 
+- **<u>Listener Middleware</u>:** A lightweight alternative to Sagas or Observables. It lets you run "effects" when specific actions are dispatched or state changes.
+- **<u>RTK Query Middleware</u>:** Specifically required when using RTK Query to handle its advanced caching, polling, and invalidation features.- - **<u>Dynamic Middleware</u>:** Allows you to inject middleware into the store after initialization, which is useful for code-splitting or modular architectures.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# How Middleware Works (The "Triple Curry")
+Under the hood, Redux middleware follows a specific functional structure consisting of three nested functions:
+1. Outer: Receives the store API (dispatch and getState).
+2. Middle: Receives the next middleware in the chain.
+3. Inner: Receives the actual action and decides whether to pass it on using next(action).
+
+
+
+## we are fetching data in redux mainly in 4 ways -
+1. Custom Middleware API
+2. Thank
+3. Redux toolKit Query
+4. Redux Saga -- not recommended
+
