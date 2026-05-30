@@ -15,4 +15,4 @@ export const apiCall = (store) => (next) => (action) => {
 }
 
 //api action creator function
-export const makeApiCall = (payload) => {type: 'api/makeApiCall' , payload}
+export const makeApiCall = (payload) => { type:'api/makeApiCall' , payload}

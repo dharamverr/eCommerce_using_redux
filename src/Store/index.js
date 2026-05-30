@@ -14,6 +14,7 @@ import {
 } from "./wishListSlice";
 import { logger } from "./middleware/logger";
 import { apiCall } from "./middleware/customApiMiddleware";
+import { func } from "./middleware/func";
 
 export const store = configureStore({
   reducer: {
@@ -21,8 +22,5 @@ export const store = configureStore({
     cartItems: cartReducer,
     wishListItems: wishListReducer,
   },
-  middleware: (getDefaultMiddleware) => [
-  ...getDefaultMiddleware(),
-  apiCall
-]
+  middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(),apiCall,func]
 });

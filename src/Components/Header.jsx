@@ -20,45 +20,43 @@ export default function Header() {
   const dispatch = useDispatch();
   //making api call
   useEffect(() => {
-    dispatch(makeApiCall({
-      url: 'products',
-      onStart: productDataLoading.type,
-      onSuccess: fetchProductData.type,
-      onError: fetchProductDataError.type
-    }))
-    
-    // dispatch({type: 'api/makeApiCall',payload: {
-    //   url: 'products',
-    //   onStart: productDataLoading.type,
-    //   onSuccess: fetchProductData.type,
-    //   onError: fetchProductDataError.type
-    // }})
-    
-    dispatch(makeApiCall({
-      url: 'carts/1',
-      onStart: cartLoading.type,
-      onSuccess: cartItemFetch.type,
-      onError: cartItemFetchError.type
-    }))
+    // dispatch(
+    //   makeApiCall({
+    //     url: "products",
+    //     onStart: productDataLoading.type,
+    //     onSuccess: fetchProductData.type,
+    //     onError: fetchProductDataError.type,
+    //   }),
+    // );
 
-    // dispatch({type: 'api/makeApiCall',payload: {
-    //   url: 'carts/1',
-    //   onStart: cartLoading.type,
-    //   onSuccess: cartItemFetch.type,
-    //   onError: cartItemFetchError.type
-    // }})
+    /*************************Thank Middleware******************************
+    * Thank middleware allow us to dispatch function instant of object.
+    * we are going to make api call using Thank middleware. In redux toolkit 
+    * by default we have access of Thank middleware.
+    ************************************************************************/
+      dispatch((dispatch) => {
+       dispatch(productDataLoading())
+        fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+        .then(data => dispatch(fetchProductData(data)))
+        .catch((error) => dispatch(fetchProductDataError()))
+    })
 
-    // dispatch(productDataLoading());
-    // fetch("https://fakestoreapi.com/products")
-    //   .then((response) => response.json())
-    //   .then((data) => dispatch(fetchProductData(data)))
-    //   .catch((error) => dispatch(fetchProductDataError()));
-
-    // dispatch(cartLoading());
-    // fetch("https://fakestoreapi.com/carts/1")
-    //   .then((response) => response.json())
-    //   .then((data) => dispatch(cartItemFetch(data)))
-    //   .catch((error) => dispatch(cartItemFetchError()));
+    dispatch((dispatch) => {
+       dispatch(cartLoading())
+        fetch('https://fakestoreapi.com/carts/1')
+        .then(res => res.json())
+        .then(data => dispatch(cartItemFetch(data)))
+        .catch((error) => dispatch(cartItemFetchError()))
+    })
+    // dispatch(
+    //   makeApiCall({
+    //     url: "carts/1",
+    //     onStart: cartLoading.type,
+    //     onSuccess: cartItemFetch.type,
+    //     onError: cartItemFetchError.type,
+    //   }),
+    // );
   }, []);
 
   return (
