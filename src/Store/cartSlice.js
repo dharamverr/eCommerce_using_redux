@@ -65,16 +65,24 @@ const getCartItem = (cartItems, products) => {
       .filter(({ title }) => title);    
   }
 
+const {cartItemFetchError,cartLoading} = cartSlice.actions;
 export const getAllCartItem = (state) => state.cartItems
 export const getAllCartItems = createSelector([getAllCartItem,getAllProductList], getCartItem)
 
+export const fetchCartItemsData = () => (dispatch) => {
+       dispatch(cartLoading())
+        fetch('https://fakestoreapi.com/carts/1')
+        .then(res => res.json())
+        .then(data => dispatch(cartItemFetch(data)))
+        .catch((error) => dispatch(cartItemFetchError()))
+    }
+
 export const {
   cartItemFetch,
-  cartItemFetchError,
-  cartLoading,
   cartAddItem,
   cartRemoveItem,
   cartIncreaseQuantity,
   cartDecreaseQuantity,
 } = cartSlice.actions;
+
 export const cartReducer = cartSlice.reducer;

@@ -3,14 +3,12 @@ import { Link } from "react-router";
 import cartImage from "../assets/cart-icon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchProductData,
-  fetchProductDataError,
-  productDataLoading,
+  fetchProductData,  
+  fetchProductsData,
 } from "../Store/productsSlice";
 import {
   cartItemFetch,
-  cartItemFetchError,
-  cartLoading,
+  fetchCartItemsData,
 } from "../Store/cartSlice";
 import { makeApiCall } from "../Store/middleware/customApiMiddleware";
 export default function Header() {
@@ -20,43 +18,8 @@ export default function Header() {
   const dispatch = useDispatch();
   //making api call
   useEffect(() => {
-    // dispatch(
-    //   makeApiCall({
-    //     url: "products",
-    //     onStart: productDataLoading.type,
-    //     onSuccess: fetchProductData.type,
-    //     onError: fetchProductDataError.type,
-    //   }),
-    // );
-
-    /*************************Thank Middleware******************************
-    * Thank middleware allow us to dispatch function instant of object.
-    * we are going to make api call using Thank middleware. In redux toolkit 
-    * by default we have access of Thank middleware.
-    ************************************************************************/
-      dispatch((dispatch) => {
-       dispatch(productDataLoading())
-        fetch('https://fakestoreapi.com/products')
-        .then(res => res.json())
-        .then(data => dispatch(fetchProductData(data)))
-        .catch((error) => dispatch(fetchProductDataError()))
-    })
-
-    dispatch((dispatch) => {
-       dispatch(cartLoading())
-        fetch('https://fakestoreapi.com/carts/1')
-        .then(res => res.json())
-        .then(data => dispatch(cartItemFetch(data)))
-        .catch((error) => dispatch(cartItemFetchError()))
-    })
-    // dispatch(
-    //   makeApiCall({
-    //     url: "carts/1",
-    //     onStart: cartLoading.type,
-    //     onSuccess: cartItemFetch.type,
-    //     onError: cartItemFetchError.type,
-    //   }),
-    // );
+    dispatch(fetchProductsData());
+    dispatch(fetchCartItemsData());
   }, []);
 
   return (

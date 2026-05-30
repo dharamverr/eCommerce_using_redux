@@ -34,10 +34,19 @@ const slice = createSlice({
     }
 
 })
+const {productDataLoading,fetchProductDataError} = slice.actions
 
 //selector function
 export const getAllProductList = (state) => state.products
 
+export const fetchProductsData = () => (dispatch) => {
+       dispatch(productDataLoading())
+        fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+        .then(data => dispatch(fetchProductData(data)))
+        .catch((error) => dispatch(fetchProductDataError()))
+    }
+
 //console.log(slice)
-export const {productDataLoading,fetchProductDataError,fetchProductData} = slice.actions
+export const {fetchProductData} = slice.actions
 export const productReducer = slice.reducer
