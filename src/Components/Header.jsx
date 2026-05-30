@@ -12,6 +12,7 @@ import {
   cartItemFetchError,
   cartLoading,
 } from "../Store/cartSlice";
+import { makeApiCall } from "../Store/middleware/customApiMiddleware";
 export default function Header() {
   const cartItems = useSelector((state) => state.cartItems.cartList);
   const wishListItems = useSelector((state) => state.wishListItems);
@@ -19,17 +20,45 @@ export default function Header() {
   const dispatch = useDispatch();
   //making api call
   useEffect(() => {
-    dispatch(productDataLoading());
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((data) => dispatch(fetchProductData(data)))
-      .catch((error) => dispatch(fetchProductDataError()));
+    dispatch(makeApiCall({
+      url: 'products',
+      onStart: productDataLoading.type,
+      onSuccess: fetchProductData.type,
+      onError: fetchProductDataError.type
+    }))
+    
+    // dispatch({type: 'api/makeApiCall',payload: {
+    //   url: 'products',
+    //   onStart: productDataLoading.type,
+    //   onSuccess: fetchProductData.type,
+    //   onError: fetchProductDataError.type
+    // }})
+    
+    dispatch(makeApiCall({
+      url: 'carts/1',
+      onStart: cartLoading.type,
+      onSuccess: cartItemFetch.type,
+      onError: cartItemFetchError.type
+    }))
 
-    dispatch(cartLoading(true));
-    fetch("https://fakestoreapi.com/products/16")
-      .then((response) => response.json())
-      .then(({ id }) => dispatch(cartItemFetch([{productId:id,quantity: 1}])))
-      .catch((error) => dispatch(cartItemFetchError()));
+    // dispatch({type: 'api/makeApiCall',payload: {
+    //   url: 'carts/1',
+    //   onStart: cartLoading.type,
+    //   onSuccess: cartItemFetch.type,
+    //   onError: cartItemFetchError.type
+    // }})
+
+    // dispatch(productDataLoading());
+    // fetch("https://fakestoreapi.com/products")
+    //   .then((response) => response.json())
+    //   .then((data) => dispatch(fetchProductData(data)))
+    //   .catch((error) => dispatch(fetchProductDataError()));
+
+    // dispatch(cartLoading());
+    // fetch("https://fakestoreapi.com/carts/1")
+    //   .then((response) => response.json())
+    //   .then((data) => dispatch(cartItemFetch(data)))
+    //   .catch((error) => dispatch(cartItemFetchError()));
   }, []);
 
   return (
