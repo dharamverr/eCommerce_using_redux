@@ -13,6 +13,7 @@ import {
   wishListRemoveItem,
 } from "./wishListSlice";
 import { logger } from "./middleware/logger";
+import { apiCall } from "./middleware/customApiMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,6 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) => [
   ...getDefaultMiddleware(),
-  
+  apiCall
 ]
 });

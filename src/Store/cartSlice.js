@@ -24,7 +24,7 @@ const cartSlice = createSlice({
     },
     cartItemFetch(state, action) {
       state.isLoading = false;
-      state.cartList = action.payload;
+      state.cartList = action.payload.products;
     },
     cartAddItem(state, action) {
       const findIndex = findItemIndex(state, action);
