@@ -1,42 +1,77 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { produce } from "immer";
+import { getAllProductList } from "./productsSlice";
 
 const findItemIndex = (state, action) =>
-  state.findIndex(
+  state.cartList.findIndex(
     (cartItem) => cartItem.productId === action.payload.productId,
   );
 const cartSlice = createSlice({
   name: "cart",
-  initialState: [],
+  initialState: {
+    isLoading: false,
+    cartList: [],
+    fetchError: "",
+  },
   reducers: {
+    cartLoading(state, action) {
+      state.isLoading = true;
+      state.fetchError = "";
+    },
+    cartItemFetchError(state, action) {
+      state.isLoading = false;
+      state.fetchError = action.payload || "Cart Item not fetched.";
+    },
+    cartItemFetch(state, action) {
+      state.isLoading = false;
+      state.cartList = action.payload;
+    },
     cartAddItem(state, action) {
       const findIndex = findItemIndex(state, action);
       if (findIndex !== -1) {
-        state[findIndex].quantity += 1;
+        state.cartList[findIndex].quantity += 1;
       } else {
-        state.push({ ...action.payload, quantity: 1 });
+        state.cartList.push({ ...action.payload, quantity: 1 });
       }
     },
     cartRemoveItem(state, action) {
       const findIndex = findItemIndex(state, action);
-      state.splice(findIndex, 1);
+      state.cartList.splice(findIndex, 1);
     },
     cartIncreaseQuantity(state, action) {
       const findIndex = findItemIndex(state, action);
-      state[findIndex].quantity += 1;
+      state.cartList[findIndex].quantity += 1;
     },
     cartDecreaseQuantity(state, action) {
       const findIndex = findItemIndex(state, action);
-      if (state[findIndex].quantity <= 1) {
-        state.splice(findIndex, 1);
+      if (state.cartList[findIndex].quantity <= 1) {
+        state.cartList.splice(findIndex, 1);
       } else {
-        state[findIndex].quantity -= 1;
+        state.cartList[findIndex].quantity -= 1;
       }
     },
   },
 });
 
+//selector function
+const getCartItem = (cartItems, products) => {
+    return cartItems.cartList
+      .map(({ productId, quantity }) => {
+        const cartProduct = products.list.find(
+          (product) => product.id === productId,
+        );
+        return { ...cartProduct, quantity };
+      })
+      .filter(({ title }) => title);    
+  }
+
+export const getAllCartItem = (state) => state.cartItems
+export const getAllCartItems = createSelector([getAllCartItem,getAllProductList], getCartItem)
+
 export const {
+  cartItemFetch,
+  cartItemFetchError,
+  cartLoading,
   cartAddItem,
   cartRemoveItem,
   cartIncreaseQuantity,

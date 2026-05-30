@@ -1,33 +1,25 @@
 import React, { useState } from "react";
 import CartItems from "./CartItems";
 import { useSelector } from "react-redux";
+import { getAllCartItem, getAllCartItems } from "../Store/cartSlice";
 
 export default function Cart() {
-  //const cartItems = useSelector(state => state.cartItems)
+  /***********************************************************************
+   *    while optimizing the cartItems we got a warning : 'Selector unknown
+   *    returned a different result when called with the same parameters. 
+   *    This can lead to unnecessary rerenders.' To avoid this warning we have to 
+   *    use selector function.
 
-  /*Now we are going to save memory using previous data use. Initial we are 
-  making api call to get all product details. these individual product adding
-  in cart by add to cart button. On clicking this add to cart button previously we
-  are dispatching all required data. but now we are dispatching only productId 
-  and remaining data use of products slice. we are implementing this in below*/
-  const cartItems = useSelector(({ cartItems, products }) => {
-    return cartItems.cartList
-      .map(({ productId, quantity }) => {
-        const cartProduct = products.list.find(
-          (product) => product.id === productId,
-        );
-        return { ...cartProduct, quantity };
-      })
-      .filter(({ title }) => title);
-    /*Here filter is used for handle error which is comes when cartItemFetch() 
-    api call comes before fetchProductData() api call. In this case we gor 
-    productId first and start finding in productList which is not comes yet.
-    Hence it throw error. so to prevent this error we are using filter that
-    we kept only those cartItems who has title. in this way we handled this
-    error.*/
-  });
-  const cart = useSelector((state) => state.cartItems);
-  const { isLoading, fetchError, cartList } = cart;
+   *    What is selector function : the function which pass inside the 
+   *    useSelector is called selector function.
+   *    The best practice it use selector function is that do not defined 
+   *    inline like this useSelector((state) => state.cartItems). we defined 
+   *    this selector function inside the slices.
+   ***********************************************************************/
+   const cartItems = useSelector(getAllCartItems);
+
+  const { isLoading, fetchError, cartList }  = useSelector(getAllCartItem);
+  
   //console.log(cartItems)
   const totalAmount = cartItems.reduce(
     (accumulator, currentValue) =>

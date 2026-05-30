@@ -1,10 +1,11 @@
 import React from 'react'
 import { cartDecreaseQuantity, cartIncreaseQuantity, cartRemoveItem } from '../Store/cartSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import deleteIcon from '../assets/delete-svgrepo-com.svg'
 
 export default function CartItems({productId,title,rating,image,price,quantity}) {
     const dispatch = useDispatch()
+   
   return (
     <div className="grid grid-cols-[4fr_1fr_1fr_1fr] items-center p-4 border-b">
         <div className='flex gap-4'>

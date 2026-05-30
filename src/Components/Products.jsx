@@ -75,7 +75,7 @@ export default function Products({ productId, title, rating, price, image }) {
         <button
           className="py-1 px-2 bg-gray-200 rounded cursor-pointer"
           onClick={() =>
-            dispatch(cartAddItem({ productId, title, rating, price, image }))
+            dispatch(cartAddItem({ productId}))
           }
         >
           Add to cart
