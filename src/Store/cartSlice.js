@@ -22,19 +22,7 @@ const cartSlice = createSlice({
     cartList: [],
     fetchError: "",
   },
-  reducers: {
-    // cartLoading(state, action) {
-    //   state.isLoading = true;
-    //   state.fetchError = "";
-    // },
-    // cartItemFetchError(state, action) {
-    //   state.isLoading = false;
-    //   state.fetchError = action.payload || "Cart Item not fetched.";
-    // },
-    // cartItemFetch(state, action) {
-    //   state.isLoading = false;
-    //   state.cartList = action.payload.products;
-    // },
+  reducers: {    
     cartAddItem(state, action) {
       const findIndex = findItemIndex(state, action);
       if (findIndex !== -1) {
@@ -86,17 +74,8 @@ const getCartItem = (cartItems, products) => {
       .filter(({ title }) => title);    
   }
 
-const {cartItemFetchError,cartLoading} = cartSlice.actions;
 export const getAllCartItem = (state) => state.cartItems
 export const getAllCartItems = createSelector([getAllCartItem,getAllProductList], getCartItem)
-
-// export const fetchCartItemsData = () => (dispatch) => {
-//        dispatch(cartLoading())
-//         fetch('https://fakestoreapi.com/carts/1')
-//         .then(res => res.json())
-//         .then(data => dispatch(cartItemFetch(data)))
-//         .catch((error) => dispatch(cartItemFetchError()))
-//     }
 
 export const {
   cartItemFetch,
