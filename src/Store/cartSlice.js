@@ -1,7 +1,16 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
 import { produce } from "immer";
 import { getAllProductList } from "./productsSlice";
 
+// create Async Thunk
+export const fetchCartItemsData = createAsyncThunk('cart/fetchCartItem', async () => {
+  try {
+    const res = await fetch('https://fakestoreapi.com/carts/1')
+    return res.json()
+  } catch (error) {
+    throw error
+  }
+})
 const findItemIndex = (state, action) =>
   state.cartList.findIndex(
     (cartItem) => cartItem.productId === action.payload.productId,
@@ -14,18 +23,18 @@ const cartSlice = createSlice({
     fetchError: "",
   },
   reducers: {
-    cartLoading(state, action) {
-      state.isLoading = true;
-      state.fetchError = "";
-    },
-    cartItemFetchError(state, action) {
-      state.isLoading = false;
-      state.fetchError = action.payload || "Cart Item not fetched.";
-    },
-    cartItemFetch(state, action) {
-      state.isLoading = false;
-      state.cartList = action.payload.products;
-    },
+    // cartLoading(state, action) {
+    //   state.isLoading = true;
+    //   state.fetchError = "";
+    // },
+    // cartItemFetchError(state, action) {
+    //   state.isLoading = false;
+    //   state.fetchError = action.payload || "Cart Item not fetched.";
+    // },
+    // cartItemFetch(state, action) {
+    //   state.isLoading = false;
+    //   state.cartList = action.payload.products;
+    // },
     cartAddItem(state, action) {
       const findIndex = findItemIndex(state, action);
       if (findIndex !== -1) {
@@ -51,6 +60,18 @@ const cartSlice = createSlice({
       }
     },
   },
+  extraReducers : (builder) => {
+    builder.addCase(fetchCartItemsData.pending, (state) => {
+       state.isLoading = true;
+      state.fetchError = "";
+    }).addCase(fetchCartItemsData.fulfilled, (state,action) => {
+      state.isLoading = false;
+      state.cartList = action.payload.products;
+    }).addCase(fetchCartItemsData.rejected, (state,action) => {
+      state.isLoading = false;
+      state.fetchError = action.payload || "Cart Item not fetched.";
+    })
+  }
 });
 
 //selector function
@@ -69,13 +90,13 @@ const {cartItemFetchError,cartLoading} = cartSlice.actions;
 export const getAllCartItem = (state) => state.cartItems
 export const getAllCartItems = createSelector([getAllCartItem,getAllProductList], getCartItem)
 
-export const fetchCartItemsData = () => (dispatch) => {
-       dispatch(cartLoading())
-        fetch('https://fakestoreapi.com/carts/1')
-        .then(res => res.json())
-        .then(data => dispatch(cartItemFetch(data)))
-        .catch((error) => dispatch(cartItemFetchError()))
-    }
+// export const fetchCartItemsData = () => (dispatch) => {
+//        dispatch(cartLoading())
+//         fetch('https://fakestoreapi.com/carts/1')
+//         .then(res => res.json())
+//         .then(data => dispatch(cartItemFetch(data)))
+//         .catch((error) => dispatch(cartItemFetchError()))
+//     }
 
 export const {
   cartItemFetch,
